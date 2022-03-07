@@ -31,12 +31,11 @@ namespace Svc {
       ASSERT_FROM_PORT_HISTORY_SIZE(0);
 
       Fw::Buffer buffers[MAX_NUM_BUFFERS];
-      const U32 managerID = 42;
-      const U64 data = 0;
+      U8* data = new U8[10*sizeof(U32)];
       const U32 size = 10;
       for (U32 i = 0; i < MAX_NUM_BUFFERS; ++i) {
         const U32 bufferID = i;
-        Fw::Buffer b(managerID, bufferID, data, size);
+        Fw::Buffer b(data, size, bufferID);
         buffers[i] = b;
         this->invoke_to_bufferSendInFill(0, buffers[i]);
         this->component.doDispatch();
@@ -74,6 +73,8 @@ namespace Svc {
         ASSERT_from_bufferSendOutDrain(i, buffers[i]);
         ASSERT_from_bufferSendOutReturn(i, buffers[i]);
       }
+
+      delete[] data;
 
     }
 

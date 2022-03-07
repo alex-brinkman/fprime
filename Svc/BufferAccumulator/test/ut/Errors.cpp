@@ -24,7 +24,9 @@ namespace Svc {
       QueueFull(void)
     {
 
-      Fw::Buffer buffer;
+      U8* data = new U8;
+
+      Fw::Buffer buffer(data, 1, 0);
 
       // Go to Accumulate mode
       ASSERT_EQ(BufferAccumulator::DRAIN, this->component.mode);
@@ -83,6 +85,7 @@ namespace Svc {
       ASSERT_EVENTS_SIZE(3);
       ASSERT_EVENTS_BA_QueueFull_SIZE(2);
 
+      delete data;
     }
 
   }

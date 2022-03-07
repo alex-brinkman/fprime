@@ -27,13 +27,12 @@ namespace Svc {
     {
       ASSERT_EQ(BufferAccumulator::DRAIN, this->component.mode);
       Fw::Buffer buffers[MAX_NUM_BUFFERS];
-      const U32 managerID = 42;
-      const U64 data = 0;
+      U8* data = new U8[10*sizeof(U32)];
       const U32 size = 10;
       for (U32 i = 0; i < MAX_NUM_BUFFERS; ++i) {
         ASSERT_from_bufferSendOutDrain_SIZE(i);
         const U32 bufferID = i;
-        Fw::Buffer b(managerID, bufferID, data, size);
+        Fw::Buffer b(data, size, bufferID);
         buffers[i] = b;
         this->invoke_to_bufferSendInFill(0, buffers[i]);
         this->component.doDispatch();
@@ -43,6 +42,8 @@ namespace Svc {
         this->component.doDispatch();
         ASSERT_from_bufferSendOutReturn(i, buffers[i]);
       }
+
+      delete[] data;
     }
 
   }

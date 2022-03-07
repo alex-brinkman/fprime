@@ -16,6 +16,7 @@ register_fprime_module()
 
 ### UTS ###
 set(UT_SOURCE_FILES
+  "${CMAKE_CURRENT_LIST_DIR}/BufferAccumulatorComponentAi.xml"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/Tester.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/Accumulate.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/Drain.cpp"
