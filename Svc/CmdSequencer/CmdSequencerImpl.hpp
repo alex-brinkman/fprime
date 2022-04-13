@@ -679,6 +679,23 @@ namespace Svc {
           const Fw::CmdStringArg& fileName //!< The name of the sequence file
       );
 
+      //! Implementation for CS_SET_TIMEOUT command handler
+      //! Override default timeout value
+      void CS_SET_TIMEOUT_cmdHandler(
+          const FwOpcodeType opCode, /*!< The opcode*/
+          const U32 cmdSeq, /*!< The command sequence number*/
+          U32 timeout /*!< New timeout value*/
+      );
+
+      //! Implementation for CS_SET_ERROR_MODE command handler
+      //! Set the sequencer error handling mode
+      void CS_SET_ERROR_MODE_cmdHandler(
+          const FwOpcodeType opCode, /*!< The opcode*/
+          const U32 cmdSeq, /*!< The command sequence number*/
+          SeqErrResp resp /*!< Which error response to change*/
+      );
+
+
     PRIVATE:
 
       // ----------------------------------------------------------------------
@@ -788,6 +805,9 @@ namespace Svc {
       SeqBlkState m_blockState;
       FwOpcodeType m_opCode;
       U32 m_cmdSeq;
+
+      //! error handling modes
+      bool m_ignoreCmdFails; //!< ignore command failures
 
   };
 

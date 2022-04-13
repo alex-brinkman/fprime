@@ -48,4 +48,25 @@ acknowledged.
 	<command kind="async" opcode="6" mnemonic="CS_MANUAL">
 		<comment>Set the run mode to MANUAL.</comment>
 	</command>
+        <command kind="async" opcode="7" mnemonic="CS_SET_TIMEOUT">
+            <comment>Override default timeout value</comment>
+            <args>
+                <arg type="U32" name="timeout">
+                    <comment>New timeout value</comment>
+                </arg>
+            </args>
+        </command>
+        <command kind="async" opcode="8" mnemonic="CS_SET_ERROR_MODE">
+            <comment>Set the sequencer command error handling mode</comment>
+            <args>
+                <arg type="ENUM" name="resp">
+                    <comment>What the response should be</comment>
+                    <enum name="SeqErrResp">
+                        <item name="SEQ_ERR_RESP_FAIL"/>
+                        <item name="SEQ_ERR_RESP_IGNORE"/>
+                    </enum>
+                </arg>
+            </args>
+        </command>
+
 </commands>
