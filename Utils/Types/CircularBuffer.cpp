@@ -40,15 +40,19 @@ NATIVE_UINT_TYPE CircularBuffer :: get_remaining_size(bool serialization) {
 }
 
 U8* CircularBuffer :: increment(U8* const pointer, NATIVE_UINT_TYPE amount) {
-    U8* ret = pointer;
+    //U8* ret = pointer;
     //TODO: need O(1) implementation here
-    for (NATIVE_UINT_TYPE i = 0; i < amount; i++) {
+    /*for (NATIVE_UINT_TYPE i = 0; i < amount; i++) {
         ret = ret + 1;
         if (ret >= (m_store + m_size)) {
             ret = m_store;
         }
     }
-    return ret;
+    return ret;*/
+    NATIVE_UINT_TYPE offset = pointer - m_store;
+    NATIVE_UINT_TYPE offset_new = offset + amount;
+    NATIVE_UINT_TYPE offset_mod = offset_new < m_size ? offset_new : offset_new % m_size;
+    return m_store + offset_mod;
 }
 
 Fw::SerializeStatus CircularBuffer :: serialize(const U8* const buffer, const NATIVE_UINT_TYPE size) {
