@@ -13,6 +13,7 @@ endif()
 # Use common linux setup
 add_definitions(-DTGT_OS_TYPE_LINUX)
 set(FPRIME_USE_POSIX ON)
+set(FPRIME_USE_LINUX ON)
 
 # Add Linux specific headers into the system
 include_directories(SYSTEM "${FPRIME_FRAMEWORK_PATH}/Fw/Types/Linux")
