@@ -39,7 +39,8 @@ namespace Svc {
                 this->m_entryTable[slot].opcode = opCode;
                 this->m_entryTable[slot].port = portNum;
                 this->m_entryTable[slot].used = true;
-                this->log_DIAGNOSTIC_OpCodeRegistered(opCode,portNum,slot);
+                // Removing this since it adds marginal value and adds a lot of noise
+                //this->log_DIAGNOSTIC_OpCodeRegistered(opCode,portNum,slot);
                 slotFound = true;
             } else if ((this->m_entryTable[slot].used) &&
                 (this->m_entryTable[slot].opcode == opCode) &&
