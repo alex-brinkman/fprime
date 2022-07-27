@@ -130,23 +130,13 @@ namespace Svc {
         return;
     }
 
-    if (this->fileCounter == 0) {
-        this->name.format(
-            "%s%s%s",
-            this->prefix.toChar(),
-            this->baseName.toChar(),
-            this->suffix.toChar()
-        );
-    }
-    else {
-        this->name.format(
-            "%s%s%d%s",
-            this->prefix.toChar(),
-            this->baseName.toChar(),
-            this->fileCounter,
-            this->suffix.toChar()
-        );
-    }
+    this->name.format(
+        "%s%s%5d%s",
+        this->prefix.toChar(),
+        this->baseName.toChar(),
+        this->fileCounter,
+        this->suffix.toChar()
+    );
 
     const Os::File::Status status = this->osFile.open(
         this->name.toChar(),
