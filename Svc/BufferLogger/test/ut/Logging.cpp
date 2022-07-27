@@ -103,9 +103,10 @@ namespace Svc {
           // Create file name
           Fw::String currentFileName;
           currentFileName.format(
-              "%s%s%s",
+              "%s%s%05d%s",
               this->component.m_file.prefix.toChar(),
               baseName,
+              0,
               this->component.m_file.suffix.toChar()
           );
           this->sendBuffers(1);
@@ -121,7 +122,7 @@ namespace Svc {
             // This should open a new file with the updated counter
             this->sendBuffers(1);
             currentFileName.format(
-                "%s%s%d%s",
+                "%s%s%05d%s",
                 this->component.m_file.prefix.toChar(),
                 baseName,
                 i,
@@ -145,15 +146,16 @@ namespace Svc {
             Fw::String fileName;
             if (i == 0) {
                 fileName.format(
-                    "%s%s%s",
+                    "%s%s%05d%s",
                     this->component.m_file.prefix.toChar(),
                     baseName,
+                    0,
                     this->component.m_file.suffix.toChar()
                 );
             }
             else {
                 fileName.format(
-                    "%s%s%d%s",
+                    "%s%s%05d%s",
                     this->component.m_file.prefix.toChar(),
                     baseName,
                     i,

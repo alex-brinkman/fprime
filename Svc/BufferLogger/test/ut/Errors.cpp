@@ -100,9 +100,10 @@ namespace Svc {
       // Construct file name
       Fw::String fileName;
       fileName.format(
-          "%s%s%s",
+          "%s%s%05d%s",
           this->component.m_file.prefix.toChar(),
           this->component.m_file.baseName.toChar(),
+          0,
           this->component.m_file.suffix.toChar()
       );
 
@@ -124,7 +125,7 @@ namespace Svc {
 
       // NOTE(mereweth) - new file; counter has incremented
       fileName.format(
-          "%s%s%d%s",
+          "%s%s%05d%s",
           this->component.m_file.prefix.toChar(),
           this->component.m_file.baseName.toChar(),
           1,
@@ -177,9 +178,10 @@ namespace Svc {
       ASSERT_EVENTS_SIZE(2);
       Fw::String fileName;
       fileName.format(
-          "%s%s%s",
+          "%s%s%05d%s",
           this->component.m_file.prefix.toChar(),
           this->component.m_file.baseName.toChar(),
+          0,
           this->component.m_file.suffix.toChar()
       );
       ASSERT_EVENTS_BL_LogFileClosed(
