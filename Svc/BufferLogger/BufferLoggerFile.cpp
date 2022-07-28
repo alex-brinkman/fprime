@@ -131,7 +131,7 @@ namespace Svc {
     }
 
     this->name.format(
-        "%s%s%5d%s",
+        "%s%s%05d%s",
         this->prefix.toChar(),
         this->baseName.toChar(),
         this->fileCounter,
