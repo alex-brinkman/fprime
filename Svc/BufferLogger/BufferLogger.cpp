@@ -156,4 +156,16 @@ namespace Svc {
     }
   }
 
+  void BufferLogger ::
+    BL_OpenFileTimestamp_cmdHandler(
+        const FwOpcodeType opCode,
+        const U32 cmdSeq,
+        const Fw::CmdStringArg& file
+    )
+  {
+    Fw::Time now = this->getTime();
+    m_file.setBaseNameTimestamp(file, now);
+    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+  }
+
 };

@@ -70,6 +70,12 @@ namespace Svc {
               const Fw::StringBase& baseName //!< The base file name; used with prefix, unique counter value, and suffix
           );
 
+          //! Set base file name and timestamp
+          void setBaseNameTimestamp(
+              const Fw::StringBase& baseName, //!< The base file name; used with prefix, unique counter value, and suffix
+              const Fw::Time timestamp
+          );
+
           //! Log a buffer
           void logBuffer(
               const U8 *const data, //!< The buffer data
@@ -147,6 +153,8 @@ namespace Svc {
 
           //! The number of bytes written to the current file
           U32 bytesWritten;
+
+          Fw::Time nameTimestamp;
 
       }; // class File
 
@@ -248,6 +256,14 @@ namespace Svc {
       void BL_FlushFile_cmdHandler(
           const FwOpcodeType opCode, /*!< The opcode*/
           const U32 cmdSeq /*!< The command sequence number*/
+      );
+
+      //! Implementation for BL_OpenFile command handler
+      //! Open a new log file with specified name and timestamp; required before activating logging
+      void BL_OpenFileTimestamp_cmdHandler(
+          const FwOpcodeType opCode, /*!< The opcode*/
+          const U32 cmdSeq, /*!< The command sequence number*/
+          const Fw::CmdStringArg& file
       );
 
   PRIVATE:
