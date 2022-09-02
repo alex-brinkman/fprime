@@ -41,6 +41,9 @@ namespace Svc {
         //! Test logging on/off capability
         void OnOff(void);
 
+        //! Test Open File Timestamp command
+        void OpenFileTimestamp(void);
+
     };
 
   }

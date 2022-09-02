@@ -55,6 +55,11 @@ TEST(TestLogging, OnOff) {
   tester.OnOff();
 }
 
+TEST(TestLogging, OpenFileTimestamp) {
+  Svc::Logging::Tester tester;
+  tester.OpenFileTimestamp();
+}
+
 // ----------------------------------------------------------------------
 // Test Health
 // ----------------------------------------------------------------------

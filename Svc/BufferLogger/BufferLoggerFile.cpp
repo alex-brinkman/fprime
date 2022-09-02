@@ -32,7 +32,8 @@ namespace Svc {
       maxSize(0),
       sizeOfSize(0),
       mode(Mode::CLOSED),
-      bytesWritten(0)
+      bytesWritten(0),
+      nameTimestamp(Fw::Time())
   {
   }
 
@@ -61,6 +62,7 @@ namespace Svc {
       this->suffix = logFileSuffix;
       this->maxSize = maxFileSize;
       this->sizeOfSize = sizeOfSize;
+      this->nameTimestamp = Fw::Time();
 
       FW_ASSERT(sizeOfSize <= sizeof(U32), sizeOfSize);
       FW_ASSERT(maxSize > sizeOfSize, maxSize);
@@ -76,6 +78,22 @@ namespace Svc {
       }
       this->baseName = baseName;
       this->fileCounter = 0;
+      this->nameTimestamp = Fw::Time();
+      this->open();
+  }
+
+  void BufferLogger::File ::
+    setBaseNameTimestamp(
+        const Fw::StringBase& baseName,
+        const Fw::Time timestamp
+    )
+  {
+      if (this->mode == File::Mode::OPEN) {
+          this->closeAndEmitEvent();
+      }
+      this->baseName = baseName;
+      this->fileCounter = 0;
+      this->nameTimestamp = timestamp;
       this->open();
   }
 
@@ -130,13 +148,25 @@ namespace Svc {
         return;
     }
 
-    this->name.format(
-        "%s%s%05d%s",
-        this->prefix.toChar(),
-        this->baseName.toChar(),
-        this->fileCounter,
-        this->suffix.toChar()
-    );
+    if (this->nameTimestamp == Fw::Time()) {
+        this->name.format(
+            "%s%s%05d%s",
+            this->prefix.toChar(),
+            this->baseName.toChar(),
+            this->fileCounter,
+            this->suffix.toChar()
+        );
+    } else {
+        this->name.format(
+            "%s%s%05d_%u_%06u%s",
+            this->prefix.toChar(),
+            this->baseName.toChar(),
+            this->fileCounter,
+            this->nameTimestamp.getSeconds(),
+            this->nameTimestamp.getUSeconds(),
+            this->suffix.toChar()
+        );
+    }
 
     const Os::File::Status status = this->osFile.open(
         this->name.toChar(),

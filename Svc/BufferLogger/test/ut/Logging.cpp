@@ -275,6 +275,122 @@ namespace Svc {
       }
     }
 
+    class OpenFileTimestampTester :
+      public Logging::Tester
+    {
+
+      protected:
+
+        void sendBuffers(const U32 n) {
+          this->sendManagedBuffers(n);
+        }
+
+      public:
+
+        //! Run a test
+        void test(
+            const U32 numFiles, //!< The number of files to create
+            const char *const baseName //!< The baseName to use
+        ) {
+
+          this->setTestTime(Fw::Time(112233,1234));
+
+          this->sendCmd_BL_OpenFileTimestamp(0, 0, baseName);
+          this->dispatchOne();
+          // Create file name
+          Fw::String currentFileName;
+          currentFileName.format(
+              "%s%s%05d_%u_%06u%s",
+              this->component.m_file.prefix.toChar(),
+              baseName,
+              0,
+              112233,
+              1234,
+              this->component.m_file.suffix.toChar()
+          );
+          this->sendBuffers(1);
+          // 0th event has already happened (file open)
+          for (U32 i = 1; i < numFiles+1; ++i) {
+            // File was just created and name set
+            ASSERT_EQ(currentFileName, this->component.m_file.name);
+            // Write data to the file
+            this->sendBuffers(MAX_ENTRIES_PER_FILE-1);
+            // File still should have same name
+            ASSERT_EQ(currentFileName, this->component.m_file.name);
+            // Send more data
+            // This should open a new file with the updated counter
+            this->sendBuffers(1);
+            currentFileName.format(
+                "%s%s%05d_%u_%06u%s",
+                this->component.m_file.prefix.toChar(),
+                baseName,
+                i,
+                112233,
+                1234,
+                this->component.m_file.suffix.toChar()
+            );
+            // Assert file state
+            ASSERT_EQ(BufferLogger::File::Mode::OPEN, component.m_file.mode);
+            ASSERT_EQ(currentFileName, this->component.m_file.name);
+            // Assert events
+            ASSERT_EVENTS_SIZE(i);
+            ASSERT_EVENTS_BL_LogFileClosed_SIZE(i);
+          }
+
+          // Close the last file
+          this->sendCmd_BL_CloseFile(0, 0);
+          this->dispatchOne();
+
+          // Check files
+          for (U32 i = 0; i < numFiles; ++i) {
+            // Create file name
+            Fw::String fileName;
+            if (i == 0) {
+                fileName.format(
+                    "%s%s%05d_%u_%06u%s",
+                    this->component.m_file.prefix.toChar(),
+                    baseName,
+                    0,
+                    112233,
+                    1234,
+                    this->component.m_file.suffix.toChar()
+                );
+            }
+            else {
+                fileName.format(
+                    "%s%s%05d_%u_%06u%s",
+                    this->component.m_file.prefix.toChar(),
+                    baseName,
+                    i,
+                    112233,
+                    1234,
+                    this->component.m_file.suffix.toChar()
+                );
+            }
+            // Check events
+            ASSERT_EVENTS_BL_LogFileClosed(i, fileName.toChar());
+            // Check file integrity
+            this->checkLogFileIntegrity(
+                fileName.toChar(),
+                MAX_BYTES_PER_FILE,
+                MAX_ENTRIES_PER_FILE
+            );
+            // Check validation
+            this->checkFileValidation(fileName.toChar());
+          }
+
+        }
+
+    };
+
+
+    void Tester ::
+      OpenFileTimestamp()
+    {
+      OpenFileTimestampTester tester;
+      tester.test(3, "OpenFileTS");
+    }
+
   }
 
 }

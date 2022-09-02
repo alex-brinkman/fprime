@@ -28,4 +28,12 @@
     <comment>Flushes the current open log file to disk; a no-op with fprime's unbuffered file I/O, so always returns success</comment>
   </command>
 
+  <command kind="async" opcode="0x04" mnemonic="BL_OpenFileTimestamp">
+    <comment>Open a new log file with specified name and timestamp; also resets unique file counter to 0</comment>
+    <args>
+      <arg name="file" type="string" size = "40"/>
+    </args>
+  </command>
+
+
 </commands>
